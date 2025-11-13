@@ -1,6 +1,26 @@
 use std::io::{self, BufRead};
 use num_format::{Locale, ToFormattedString};
 use colored::Colorize;
+use clap::Parser;
+
+/// Format numbers with thousand separators and colorful size descriptions
+#[derive(Parser)]
+#[command(name = "nn")]
+#[command(version)]
+#[command(about)]
+#[command(long_about = "Format numbers with thousand separators and colorful size descriptions
+
+Reads a number from stdin and outputs it formatted with commas as thousand
+separators, along with a whimsical description of its size. Decimal numbers
+are rounded to 2 decimal places, with a \"(rounded)\" note when applicable.
+
+EXAMPLES:
+  echo \"42\" | nn              # 42 (tiny)
+  echo \"5000\" | nn            # 5,000 (medium)
+  echo \"42.123456\" | nn       # 42.12 (rounded) (tiny)
+  echo \"1234567.89\" | nn      # 1,234,567.89 (pretty big)
+  echo \"9876543210\" | nn      # 9,876,543,210 (extremely big)")]
+struct Cli {}
 
 fn get_size_description(number: f64) -> String {
     let abs_value = number.abs();
@@ -27,6 +47,8 @@ fn format_number_with_separators(number: f64) -> String {
 }
 
 fn main() {
+    let _cli = Cli::parse();
+
     let stdin = io::stdin();
     let mut lines = stdin.lock().lines();
 
