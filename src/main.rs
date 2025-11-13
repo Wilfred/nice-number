@@ -1,6 +1,7 @@
 use clap::Parser;
 use colored::Colorize;
 use num_format::{Locale, ToFormattedString};
+use regex::Regex;
 use std::io::{self, BufRead};
 
 /// Format numbers with thousand separators and colorful size descriptions
@@ -16,6 +17,9 @@ commas as thousand separators, along with a description of its size. Supports
 integers, decimals, and scientific notation. Decimal numbers are rounded to 2
 decimal places, with a \"(rounded)\" note when applicable.
 
+Can also process arbitrary text with embedded numbers, formatting only the
+numbers while preserving the rest of the text unchanged.
+
 Use --bytes flag to also display the number in binary units (KiB, MiB, GiB, etc.)
 using 1024-based prefixes.
 
@@ -28,6 +32,7 @@ EXAMPLES:
   nn 1.23e5                    # 123,000 (medium)
   nn -- -5000                  # -5,000 (medium) [use -- for negative numbers]
   nn 1048576 --bytes           # Also shows: 1 MiB
+  echo \"The file is 1024 bytes\" | nn  # The file is 1,024 bytes
   echo \"42\" | nn              # Can also read from stdin"
 )]
 struct Cli {
@@ -101,8 +106,31 @@ fn format_as_binary_units(number: f64) -> String {
     }
 }
 
+fn format_single_number(number: f64) -> String {
+    let rounded = (number * 100.0).round() / 100.0;
+    format_number_with_separators(rounded)
+}
+
+fn process_text_with_numbers(text: &str) -> String {
+    // Regex to match numbers including decimals and scientific notation
+    let re = Regex::new(r"-?\d+\.?\d*(?:[eE][+-]?\d+)?").unwrap();
+
+    re.replace_all(text, |caps: &regex::Captures| {
+        let num_str = &caps[0];
+        if let Ok(number) = num_str.parse::<f64>() {
+            format_single_number(number)
+        } else {
+            num_str.to_string()
+        }
+    })
+    .to_string()
+}
+
 fn process_number(input: &str, show_bytes: bool) {
-    match input.trim().parse::<f64>() {
+    let trimmed = input.trim();
+
+    // Try to parse as a single number first
+    match trimmed.parse::<f64>() {
         Ok(number) => {
             // Round to 2 decimal places
             let rounded = (number * 100.0).round() / 100.0;
@@ -130,8 +158,9 @@ fn process_number(input: &str, show_bytes: bool) {
             }
         }
         Err(_) => {
-            eprintln!("Error: Please enter a valid number");
-            std::process::exit(1);
+            // Not a pure number, treat as text with embedded numbers
+            let processed = process_text_with_numbers(trimmed);
+            println!("{}", processed);
         }
     }
 }

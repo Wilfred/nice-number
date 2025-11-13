@@ -215,6 +215,7 @@ dependencies = [
  "colored",
  "num-format",
  "predicates",
+ "regex",
 ]
 
 [[package]]

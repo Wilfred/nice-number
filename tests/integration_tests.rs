@@ -103,14 +103,12 @@ fn test_zero() {
 }
 
 #[test]
-fn test_invalid_input() {
+fn test_text_without_numbers_via_stdin() {
     let mut cmd = Command::cargo_bin("nn").unwrap();
     cmd.write_stdin("not a number")
         .assert()
-        .failure()
-        .stderr(predicate::str::contains(
-            "Error: Please enter a valid number",
-        ));
+        .success()
+        .stdout(predicate::str::contains("not a number"));
 }
 
 #[test]
@@ -325,14 +323,12 @@ fn test_arg_negative_number() {
 }
 
 #[test]
-fn test_arg_invalid_input() {
+fn test_arg_text_without_numbers() {
     let mut cmd = Command::cargo_bin("nn").unwrap();
     cmd.arg("not_a_number")
         .assert()
-        .failure()
-        .stderr(predicate::str::contains(
-            "Error: Please enter a valid number",
-        ));
+        .success()
+        .stdout(predicate::str::contains("not_a_number"));
 }
 
 // Tests for --bytes flag
@@ -442,4 +438,92 @@ fn test_bytes_flag_multiple_kib() {
         .success()
         .stdout(predicate::str::contains("5,120"))
         .stdout(predicate::str::contains("5 KiB"));
+}
+
+// Tests for text processing with embedded numbers
+
+#[test]
+fn test_text_with_single_number() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("The file is 1024 bytes")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("The file is 1,024 bytes"));
+}
+
+#[test]
+fn test_text_with_multiple_numbers() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("I have 5000 apples and 2500 oranges")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains(
+            "I have 5,000 apples and 2,500 oranges",
+        ));
+}
+
+#[test]
+fn test_text_with_decimal() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("Price is 1234.56 dollars")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("Price is 1,234.56 dollars"));
+}
+
+#[test]
+fn test_text_without_numbers() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("Hello world without numbers")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("Hello world without numbers"));
+}
+
+#[test]
+fn test_text_with_negative_number() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("Temperature: -25.5 degrees")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("Temperature: -25.50 degrees"));
+}
+
+#[test]
+fn test_text_with_scientific_notation() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("Science: 1.23e5 particles")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("Science: 123,000 particles"));
+}
+
+#[test]
+fn test_text_with_many_numbers() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("Results: 10 samples, 1000 iterations, 0.05 error rate")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains(
+            "Results: 10 samples, 1,000 iterations, 0.05 error rate",
+        ));
+}
+
+#[test]
+fn test_pure_number_still_shows_description() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("1024")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("1,024"))
+        .stdout(predicate::str::contains("(medium)"));
+}
+
+#[test]
+fn test_text_preserves_formatting() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("Total: 1234567 items")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("Total: 1,234,567 items"));
 }

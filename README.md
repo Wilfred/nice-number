@@ -1,6 +1,6 @@
 # nice-number
 
-A Rust command-line tool that formats numbers with thousand separators and adds colorful descriptions based on their size. Accepts numbers as command-line arguments or via stdin, and supports integers, decimals, and scientific notation.
+A Rust command-line tool that formats numbers with thousand separators and adds colorful descriptions based on their size. Accepts numbers as command-line arguments or via stdin, and supports integers, decimals, and scientific notation. Can also process arbitrary text, formatting only the embedded numbers while preserving the rest unchanged.
 
 ## Installation
 
@@ -29,8 +29,9 @@ The tool reads a number from the command line or stdin and outputs:
 - Supports integers, decimals, and scientific notation
 - Decimal numbers are rounded to 2 decimal places
 - A note "(rounded)" is added if rounding occurred
-- A colorful description of the number's size
+- A colorful description of the number's size (for pure numbers)
 - Optional binary unit format (KiB, MiB, GiB, etc.) with `--bytes` flag
+- **Text processing mode**: Can process arbitrary text with embedded numbers, formatting only the numbers while preserving the rest unchanged
 
 ### Size Categories
 
@@ -115,14 +116,40 @@ $ echo "5120" | nn --bytes
 5 KiB
 ```
 
+**Text processing mode (formats numbers within text):**
+```bash
+$ echo "The file is 1024 bytes" | nn
+The file is 1,024 bytes
+
+$ echo "I have 5000 apples and 2500 oranges" | nn
+I have 5,000 apples and 2,500 oranges
+
+$ echo "Price is 1234.56 dollars" | nn
+Price is 1,234.56 dollars
+
+$ echo "Temperature: -25.5 degrees" | nn
+Temperature: -25.50 degrees
+
+$ echo "Science: 1.23e5 particles" | nn
+Science: 123,000 particles
+
+$ echo "Results: 10 samples, 1000 iterations, 0.05 error rate" | nn
+Results: 10 samples, 1,000 iterations, 0.05 error rate
+
+$ echo "Hello world without numbers" | nn
+Hello world without numbers
+```
+
 ## Error Handling
 
-Invalid input will display an error message:
+The tool handles various input types gracefully:
+
+- **Pure numbers**: Formatted with description and optional binary units
+- **Text with numbers**: Numbers are formatted, text passes through unchanged
+- **Text without numbers**: Passes through unchanged
+- **Empty input**: Returns an error
 
 ```bash
-$ nn "not a number"
-Error: Please enter a valid number
-
-$ echo "invalid" | nn
+$ echo "" | nn
 Error: Please enter a valid number
 ```
