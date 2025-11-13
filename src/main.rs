@@ -11,13 +11,13 @@ use clap::Parser;
 #[command(long_about = "Format numbers with thousand separators and colorful size descriptions
 
 Reads a number from stdin and outputs it formatted with commas as thousand
-separators, along with a whimsical description of its size. Decimal numbers
+separators, along with a description of its size. Decimal numbers
 are rounded to 2 decimal places, with a \"(rounded)\" note when applicable.
 
 EXAMPLES:
-  echo \"42\" | nn              # 42 (tiny)
+  echo \"42\" | nn              # 42 (small)
   echo \"5000\" | nn            # 5,000 (medium)
-  echo \"42.123456\" | nn       # 42.12 (rounded) (tiny)
+  echo \"42.123456\" | nn       # 42.12 (rounded) (small)
   echo \"1234567.89\" | nn      # 1,234,567.89 (pretty big)
   echo \"9876543210\" | nn      # 9,876,543,210 (extremely big)")]
 struct Cli {}
@@ -26,7 +26,7 @@ fn get_size_description(number: f64) -> String {
     let abs_value = number.abs();
 
     match abs_value as i64 {
-        0..=999 => "(tiny)".bright_cyan().to_string(),
+        0..=999 => "(small)".bright_cyan().to_string(),
         1_000..=999_999 => "(medium)".bright_green().to_string(),
         1_000_000..=999_999_999 => "(pretty big)".bright_yellow().to_string(),
         _ => "(extremely big)".bright_red().bold().to_string(),
