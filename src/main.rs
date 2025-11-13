@@ -5,8 +5,6 @@ fn main() {
     let stdin = io::stdin();
     let mut lines = stdin.lock().lines();
 
-    println!("Enter an integer:");
-
     if let Some(Ok(line)) = lines.next() {
         match line.trim().parse::<i64>() {
             Ok(number) => {
