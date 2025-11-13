@@ -11,21 +11,25 @@ use std::io::{self, BufRead};
 #[command(
     long_about = "Format numbers with thousand separators and colorful size descriptions
 
-Reads a number from stdin and outputs it formatted with commas as thousand
-separators, along with a description of its size. Supports integers, decimals,
-and scientific notation. Decimal numbers are rounded to 2 decimal places, with
-a \"(rounded)\" note when applicable.
+Reads a number from the command line or stdin and outputs it formatted with
+commas as thousand separators, along with a description of its size. Supports
+integers, decimals, and scientific notation. Decimal numbers are rounded to 2
+decimal places, with a \"(rounded)\" note when applicable.
 
 EXAMPLES:
-  echo \"42\" | nn              # 42 (small)
-  echo \"5000\" | nn            # 5,000 (medium)
-  echo \"42.123456\" | nn       # 42.12 (rounded) (small)
-  echo \"1234567.89\" | nn      # 1,234,567.89 (pretty big)
-  echo \"9876543210\" | nn      # 9,876,543,210 (extremely big)
-  echo \"1.23e5\" | nn          # 123,000 (medium)
-  echo \"9.87654321e9\" | nn    # 9,876,543,210 (extremely big)"
+  nn 42                        # 42 (small)
+  nn 5000                      # 5,000 (medium)
+  nn 42.123456                 # 42.12 (rounded) (small)
+  nn 1234567.89                # 1,234,567.89 (pretty big)
+  nn 9876543210                # 9,876,543,210 (extremely big)
+  nn 1.23e5                    # 123,000 (medium)
+  nn -- -5000                  # -5,000 (medium) [use -- for negative numbers]
+  echo \"42\" | nn              # Can also read from stdin"
 )]
-struct Cli {}
+struct Cli {
+    /// The number to format (reads from stdin if not provided)
+    number: Option<String>,
+}
 
 fn get_size_description(number: f64) -> String {
     let abs_value = number.abs();
@@ -55,42 +59,52 @@ fn format_number_with_separators(number: f64) -> String {
     }
 }
 
-fn main() {
-    let _cli = Cli::parse();
+fn process_number(input: &str) {
+    match input.trim().parse::<f64>() {
+        Ok(number) => {
+            // Round to 2 decimal places
+            let rounded = (number * 100.0).round() / 100.0;
 
-    let stdin = io::stdin();
-    let mut lines = stdin.lock().lines();
+            // Check if rounding occurred
+            let was_rounded = (number - rounded).abs() > f64::EPSILON;
 
-    if let Some(Ok(line)) = lines.next() {
-        match line.trim().parse::<f64>() {
-            Ok(number) => {
-                // Round to 2 decimal places
-                let rounded = (number * 100.0).round() / 100.0;
+            let formatted = format_number_with_separators(rounded);
+            let rounded_text = if was_rounded {
+                " (rounded)".dimmed().to_string()
+            } else {
+                String::new()
+            };
 
-                // Check if rounding occurred
-                let was_rounded = (number - rounded).abs() > f64::EPSILON;
-
-                let formatted = format_number_with_separators(rounded);
-                let rounded_text = if was_rounded {
-                    " (rounded)".dimmed().to_string()
-                } else {
-                    String::new()
-                };
-
-                println!(
-                    "{}{} {}",
-                    formatted,
-                    rounded_text,
-                    get_size_description(rounded)
-                );
-            }
-            Err(_) => {
-                eprintln!("Error: Please enter a valid number");
-                std::process::exit(1);
-            }
+            println!(
+                "{}{} {}",
+                formatted,
+                rounded_text,
+                get_size_description(rounded)
+            );
         }
+        Err(_) => {
+            eprintln!("Error: Please enter a valid number");
+            std::process::exit(1);
+        }
+    }
+}
+
+fn main() {
+    let cli = Cli::parse();
+
+    if let Some(number_arg) = cli.number {
+        // Process number from command-line argument
+        process_number(&number_arg);
     } else {
-        eprintln!("Error: Please enter a valid number");
-        std::process::exit(1);
+        // Process number from stdin
+        let stdin = io::stdin();
+        let mut lines = stdin.lock().lines();
+
+        if let Some(Ok(line)) = lines.next() {
+            process_number(&line);
+        } else {
+            eprintln!("Error: Please enter a valid number");
+            std::process::exit(1);
+        }
     }
 }

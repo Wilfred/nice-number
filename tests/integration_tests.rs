@@ -249,3 +249,88 @@ fn test_scientific_notation_negative() {
         .stdout(predicate::str::contains("-25,000"))
         .stdout(predicate::str::contains("(medium)"));
 }
+
+// Tests for command-line argument input
+
+#[test]
+fn test_arg_small_integer() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("42")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("42"))
+        .stdout(predicate::str::contains("(small)"));
+}
+
+#[test]
+fn test_arg_medium_number() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("5000")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("5,000"))
+        .stdout(predicate::str::contains("(medium)"));
+}
+
+#[test]
+fn test_arg_decimal_with_rounding() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("42.123456")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("42.12"))
+        .stdout(predicate::str::contains("(rounded)"))
+        .stdout(predicate::str::contains("(small)"));
+}
+
+#[test]
+fn test_arg_pretty_big_decimal() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("1234567.89")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("1,234,567.89"))
+        .stdout(predicate::str::contains("(pretty big)"));
+}
+
+#[test]
+fn test_arg_extremely_big_number() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("9876543210")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("9,876,543,210"))
+        .stdout(predicate::str::contains("(extremely big)"));
+}
+
+#[test]
+fn test_arg_scientific_notation() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("1.23e5")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("123,000"))
+        .stdout(predicate::str::contains("(medium)"));
+}
+
+#[test]
+fn test_arg_negative_number() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("--")
+        .arg("-5000")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("-5,000"))
+        .stdout(predicate::str::contains("(medium)"));
+}
+
+#[test]
+fn test_arg_invalid_input() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("not_a_number")
+        .assert()
+        .failure()
+        .stderr(predicate::str::contains(
+            "Error: Please enter a valid number",
+        ));
+}

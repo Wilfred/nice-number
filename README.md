@@ -1,6 +1,6 @@
 # nice-number
 
-A Rust command-line tool that formats numbers (integers and decimals) with thousand separators and adds colorful descriptions based on their size.
+A Rust command-line tool that formats numbers with thousand separators and adds colorful descriptions based on their size. Accepts numbers as command-line arguments or via stdin, and supports integers, decimals, and scientific notation.
 
 ## Installation
 
@@ -10,19 +10,21 @@ cargo build --release
 
 ## Usage
 
+You can pass numbers as command-line arguments or via stdin:
+
+**Command-line argument:**
 ```bash
-echo "1234567" | cargo run --quiet
+nn 1234567
 ```
 
-Or use the compiled binary:
-
+**Via stdin:**
 ```bash
-echo "1234567" | ./target/release/nn
+echo "1234567" | nn
 ```
 
 ## Output
 
-The tool reads a number from stdin and outputs:
+The tool reads a number from the command line or stdin and outputs:
 - The number formatted with commas as thousand separators
 - Supports integers, decimals, and scientific notation
 - Decimal numbers are rounded to 2 decimal places
@@ -38,32 +40,39 @@ The tool reads a number from stdin and outputs:
 
 ## Examples
 
+**Using command-line arguments:**
 ```bash
-$ echo "42" | cargo run --quiet
+$ nn 42
 42 (small)
 
-$ echo "42.50" | cargo run --quiet
-42.50 (small)
-
-$ echo "42.123456" | cargo run --quiet
-42.12 (rounded) (small)
-
-$ echo "5000" | cargo run --quiet
+$ nn 5000
 5,000 (medium)
 
-$ echo "1234567.89" | cargo run --quiet
+$ nn 42.123456
+42.12 (rounded) (small)
+
+$ nn 1234567.89
 1,234,567.89 (pretty big)
 
-$ echo "2000000" | cargo run --quiet
-2,000,000 (pretty big)
-
-$ echo "9876543210" | cargo run --quiet
+$ nn 9876543210
 9,876,543,210 (extremely big)
 
-$ echo "1.23e5" | cargo run --quiet
+$ nn 1.23e5
 123,000 (medium)
 
-$ echo "9.87654321e9" | cargo run --quiet
+$ nn -- -5000
+-5,000 (medium)
+```
+
+**Using stdin:**
+```bash
+$ echo "42.50" | nn
+42.50 (small)
+
+$ echo "2000000" | nn
+2,000,000 (pretty big)
+
+$ echo "9.87654321e9" | nn
 9,876,543,210 (extremely big)
 ```
 
@@ -72,6 +81,9 @@ $ echo "9.87654321e9" | cargo run --quiet
 Invalid input will display an error message:
 
 ```bash
-$ echo "not a number" | cargo run --quiet
+$ nn "not a number"
+Error: Please enter a valid number
+
+$ echo "invalid" | nn
 Error: Please enter a valid number
 ```
