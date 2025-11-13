@@ -1,6 +1,6 @@
 # nice-number
 
-A Rust command-line tool that formats integers with thousand separators and adds colorful, whimsical descriptions based on their size.
+A Rust command-line tool that formats numbers (integers and decimals) with thousand separators and adds colorful, whimsical descriptions based on their size.
 
 ## Installation
 
@@ -22,8 +22,10 @@ echo "1234567" | ./target/release/nn
 
 ## Output
 
-The tool reads an integer from stdin and outputs:
+The tool reads a number from stdin and outputs:
 - The number formatted with commas as thousand separators
+- Decimal numbers are rounded to 2 decimal places
+- A note "(rounded)" is added if rounding occurred
 - A colorful description of the number's size
 
 ### Size Categories
@@ -39,8 +41,17 @@ The tool reads an integer from stdin and outputs:
 $ echo "42" | cargo run --quiet
 42 (tiny)
 
+$ echo "42.50" | cargo run --quiet
+42.50 (tiny)
+
+$ echo "42.123456" | cargo run --quiet
+42.12 (rounded) (tiny)
+
 $ echo "5000" | cargo run --quiet
 5,000 (medium)
+
+$ echo "1234567.89" | cargo run --quiet
+1,234,567.89 (pretty big)
 
 $ echo "2000000" | cargo run --quiet
 2,000,000 (pretty big)
@@ -55,5 +66,5 @@ Invalid input will display an error message:
 
 ```bash
 $ echo "not a number" | cargo run --quiet
-Error: Please enter a valid integer
+Error: Please enter a valid number
 ```
