@@ -75,5 +75,8 @@ fn main() {
                 std::process::exit(1);
             }
         }
+    } else {
+        eprintln!("Error: Please enter a valid number");
+        std::process::exit(1);
     }
 }
