@@ -21,8 +21,7 @@ fn main() {
         match line.trim().parse::<i64>() {
             Ok(number) => {
                 let formatted = number.to_formatted_string(&Locale::en);
-                println!("{}", formatted);
-                println!("{}", get_size_description(number));
+                println!("{} {}", formatted, get_size_description(number));
             }
             Err(_) => {
                 eprintln!("Error: Please enter a valid integer");
