@@ -16,6 +16,9 @@ commas as thousand separators, along with a description of its size. Supports
 integers, decimals, and scientific notation. Decimal numbers are rounded to 2
 decimal places, with a \"(rounded)\" note when applicable.
 
+Use --bytes flag to also display the number in binary units (KiB, MiB, GiB, etc.)
+using 1024-based prefixes.
+
 EXAMPLES:
   nn 42                        # 42 (small)
   nn 5000                      # 5,000 (medium)
@@ -24,11 +27,16 @@ EXAMPLES:
   nn 9876543210                # 9,876,543,210 (extremely big)
   nn 1.23e5                    # 123,000 (medium)
   nn -- -5000                  # -5,000 (medium) [use -- for negative numbers]
+  nn 1048576 --bytes           # Also shows: 1 MiB
   echo \"42\" | nn              # Can also read from stdin"
 )]
 struct Cli {
     /// The number to format (reads from stdin if not provided)
     number: Option<String>,
+
+    /// Display the number in binary units (KiB, MiB, GiB, etc.)
+    #[arg(short, long)]
+    bytes: bool,
 }
 
 fn get_size_description(number: f64) -> String {
@@ -59,7 +67,41 @@ fn format_number_with_separators(number: f64) -> String {
     }
 }
 
-fn process_number(input: &str) {
+fn format_as_binary_units(number: f64) -> String {
+    let abs_value = number.abs();
+    let is_negative = number < 0.0;
+
+    let units: &[(&str, f64)] = &[
+        ("EiB", 1152921504606846976.0), // 1024^6
+        ("PiB", 1125899906842624.0),    // 1024^5
+        ("TiB", 1099511627776.0),       // 1024^4
+        ("GiB", 1073741824.0),          // 1024^3
+        ("MiB", 1048576.0),             // 1024^2
+        ("KiB", 1024.0),                // 1024^1
+    ];
+
+    for &(unit, divisor) in units {
+        if abs_value >= divisor {
+            let value = number / divisor;
+            let rounded = (value * 100.0).round() / 100.0;
+            return if rounded.fract() == 0.0 {
+                format!("{} {}", rounded as i64, unit)
+            } else {
+                format!("{:.2} {}", rounded, unit)
+            };
+        }
+    }
+
+    // Less than 1 KiB, show as bytes
+    let sign = if is_negative { "-" } else { "" };
+    if abs_value.fract() == 0.0 {
+        format!("{}{} B", sign, abs_value as i64)
+    } else {
+        format!("{}{:.2} B", sign, abs_value)
+    }
+}
+
+fn process_number(input: &str, show_bytes: bool) {
     match input.trim().parse::<f64>() {
         Ok(number) => {
             // Round to 2 decimal places
@@ -81,6 +123,11 @@ fn process_number(input: &str) {
                 rounded_text,
                 get_size_description(rounded)
             );
+
+            if show_bytes {
+                let binary_format = format_as_binary_units(rounded);
+                println!("{}", binary_format.bright_magenta());
+            }
         }
         Err(_) => {
             eprintln!("Error: Please enter a valid number");
@@ -94,14 +141,14 @@ fn main() {
 
     if let Some(number_arg) = cli.number {
         // Process number from command-line argument
-        process_number(&number_arg);
+        process_number(&number_arg, cli.bytes);
     } else {
         // Process number from stdin
         let stdin = io::stdin();
         let mut lines = stdin.lock().lines();
 
         if let Some(Ok(line)) = lines.next() {
-            process_number(&line);
+            process_number(&line, cli.bytes);
         } else {
             eprintln!("Error: Please enter a valid number");
             std::process::exit(1);

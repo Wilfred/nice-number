@@ -334,3 +334,112 @@ fn test_arg_invalid_input() {
             "Error: Please enter a valid number",
         ));
 }
+
+// Tests for --bytes flag
+
+#[test]
+fn test_bytes_flag_kib() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("1024")
+        .arg("--bytes")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("1,024"))
+        .stdout(predicate::str::contains("1 KiB"));
+}
+
+#[test]
+fn test_bytes_flag_mib() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("1048576")
+        .arg("--bytes")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("1,048,576"))
+        .stdout(predicate::str::contains("1 MiB"));
+}
+
+#[test]
+fn test_bytes_flag_gib() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("1073741824")
+        .arg("--bytes")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("1,073,741,824"))
+        .stdout(predicate::str::contains("1 GiB"));
+}
+
+#[test]
+fn test_bytes_flag_short() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("2048")
+        .arg("-b")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("2,048").and(predicate::str::contains("2 KiB")));
+}
+
+#[test]
+fn test_bytes_flag_decimal() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("1536.5")
+        .arg("--bytes")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("1,536.50"))
+        .stdout(predicate::str::contains("1.50 KiB"));
+}
+
+#[test]
+fn test_bytes_flag_less_than_kib() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("512")
+        .arg("--bytes")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("512"))
+        .stdout(predicate::str::contains("512 B"));
+}
+
+#[test]
+fn test_bytes_flag_with_stdin() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("--bytes")
+        .write_stdin("2048")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("2,048"))
+        .stdout(predicate::str::contains("2 KiB"));
+}
+
+#[test]
+fn test_without_bytes_flag() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("1024")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("1,024"))
+        .stdout(predicate::str::contains("KiB").not());
+}
+
+#[test]
+fn test_bytes_flag_tib() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("1099511627776")
+        .arg("--bytes")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("1 TiB"));
+}
+
+#[test]
+fn test_bytes_flag_multiple_kib() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.arg("5120")
+        .arg("--bytes")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("5,120"))
+        .stdout(predicate::str::contains("5 KiB"));
+}
