@@ -152,7 +152,7 @@ fn process_number(input: &str, show_bytes: bool) {
                 get_size_description(rounded)
             );
 
-            if show_bytes {
+            if show_bytes && rounded != 0.0 {
                 let binary_format = format_as_binary_units(rounded);
                 println!("{}", binary_format.bright_magenta());
             }
