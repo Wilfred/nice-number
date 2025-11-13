@@ -188,3 +188,64 @@ fn test_large_decimal_with_rounding() {
         .stdout(predicate::str::contains("(rounded)"))
         .stdout(predicate::str::contains("(extremely big)"));
 }
+
+#[test]
+fn test_scientific_notation_large() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("1.23e5")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("123,000"))
+        .stdout(predicate::str::contains("(medium)"));
+}
+
+#[test]
+fn test_scientific_notation_small() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("3.14e2")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("314"))
+        .stdout(predicate::str::contains("(small)"));
+}
+
+#[test]
+fn test_scientific_notation_extremely_big() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("9.87654321e9")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("9,876,543,210"))
+        .stdout(predicate::str::contains("(extremely big)"));
+}
+
+#[test]
+fn test_scientific_notation_very_small() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("1.5e-3")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("0"))
+        .stdout(predicate::str::contains("(small)"));
+}
+
+#[test]
+fn test_scientific_notation_with_rounding() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("1.234567e3")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("1,234.57"))
+        .stdout(predicate::str::contains("(rounded)"))
+        .stdout(predicate::str::contains("(medium)"));
+}
+
+#[test]
+fn test_scientific_notation_negative() {
+    let mut cmd = Command::cargo_bin("nn").unwrap();
+    cmd.write_stdin("-2.5e4")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("-25,000"))
+        .stdout(predicate::str::contains("(medium)"));
+}

@@ -24,6 +24,7 @@ echo "1234567" | ./target/release/nn
 
 The tool reads a number from stdin and outputs:
 - The number formatted with commas as thousand separators
+- Supports integers, decimals, and scientific notation
 - Decimal numbers are rounded to 2 decimal places
 - A note "(rounded)" is added if rounding occurred
 - A colorful description of the number's size
@@ -57,6 +58,12 @@ $ echo "2000000" | cargo run --quiet
 2,000,000 (pretty big)
 
 $ echo "9876543210" | cargo run --quiet
+9,876,543,210 (extremely big)
+
+$ echo "1.23e5" | cargo run --quiet
+123,000 (medium)
+
+$ echo "9.87654321e9" | cargo run --quiet
 9,876,543,210 (extremely big)
 ```
 

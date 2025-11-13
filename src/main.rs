@@ -12,15 +12,18 @@ use std::io::{self, BufRead};
     long_about = "Format numbers with thousand separators and colorful size descriptions
 
 Reads a number from stdin and outputs it formatted with commas as thousand
-separators, along with a description of its size. Decimal numbers
-are rounded to 2 decimal places, with a \"(rounded)\" note when applicable.
+separators, along with a description of its size. Supports integers, decimals,
+and scientific notation. Decimal numbers are rounded to 2 decimal places, with
+a \"(rounded)\" note when applicable.
 
 EXAMPLES:
   echo \"42\" | nn              # 42 (small)
   echo \"5000\" | nn            # 5,000 (medium)
   echo \"42.123456\" | nn       # 42.12 (rounded) (small)
   echo \"1234567.89\" | nn      # 1,234,567.89 (pretty big)
-  echo \"9876543210\" | nn      # 9,876,543,210 (extremely big)"
+  echo \"9876543210\" | nn      # 9,876,543,210 (extremely big)
+  echo \"1.23e5\" | nn          # 123,000 (medium)
+  echo \"9.87654321e9\" | nn    # 9,876,543,210 (extremely big)"
 )]
 struct Cli {}
 
