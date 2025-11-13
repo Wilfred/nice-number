@@ -1,14 +1,15 @@
-use std::io::{self, BufRead};
-use num_format::{Locale, ToFormattedString};
-use colored::Colorize;
 use clap::Parser;
+use colored::Colorize;
+use num_format::{Locale, ToFormattedString};
+use std::io::{self, BufRead};
 
 /// Format numbers with thousand separators and colorful size descriptions
 #[derive(Parser)]
 #[command(name = "nn")]
 #[command(version)]
 #[command(about)]
-#[command(long_about = "Format numbers with thousand separators and colorful size descriptions
+#[command(
+    long_about = "Format numbers with thousand separators and colorful size descriptions
 
 Reads a number from stdin and outputs it formatted with commas as thousand
 separators, along with a description of its size. Decimal numbers
@@ -19,7 +20,8 @@ EXAMPLES:
   echo \"5000\" | nn            # 5,000 (medium)
   echo \"42.123456\" | nn       # 42.12 (rounded) (small)
   echo \"1234567.89\" | nn      # 1,234,567.89 (pretty big)
-  echo \"9876543210\" | nn      # 9,876,543,210 (extremely big)")]
+  echo \"9876543210\" | nn      # 9,876,543,210 (extremely big)"
+)]
 struct Cli {}
 
 fn get_size_description(number: f64) -> String {
@@ -40,7 +42,11 @@ fn format_number_with_separators(number: f64) -> String {
     let formatted_int = integer_part.to_formatted_string(&Locale::en);
 
     if decimal_part > 0.0 {
-        format!("{}.{:02}", formatted_int, (decimal_part * 100.0).round() as u32)
+        format!(
+            "{}.{:02}",
+            formatted_int,
+            (decimal_part * 100.0).round() as u32
+        )
     } else {
         formatted_int
     }
@@ -68,7 +74,12 @@ fn main() {
                     String::new()
                 };
 
-                println!("{}{} {}", formatted, rounded_text, get_size_description(rounded));
+                println!(
+                    "{}{} {}",
+                    formatted,
+                    rounded_text,
+                    get_size_description(rounded)
+                );
             }
             Err(_) => {
                 eprintln!("Error: Please enter a valid number");

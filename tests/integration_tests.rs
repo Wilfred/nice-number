@@ -108,7 +108,9 @@ fn test_invalid_input() {
     cmd.write_stdin("not a number")
         .assert()
         .failure()
-        .stderr(predicate::str::contains("Error: Please enter a valid number"));
+        .stderr(predicate::str::contains(
+            "Error: Please enter a valid number",
+        ));
 }
 
 #[test]
@@ -117,7 +119,9 @@ fn test_empty_input() {
     cmd.write_stdin("")
         .assert()
         .failure()
-        .stderr(predicate::str::contains("Error: Please enter a valid number"));
+        .stderr(predicate::str::contains(
+            "Error: Please enter a valid number",
+        ));
 }
 
 #[test]
@@ -126,7 +130,9 @@ fn test_help_flag() {
     cmd.arg("--help")
         .assert()
         .success()
-        .stdout(predicate::str::contains("Format numbers with thousand separators"))
+        .stdout(predicate::str::contains(
+            "Format numbers with thousand separators",
+        ))
         .stdout(predicate::str::contains("Usage:"));
 }
 
@@ -136,7 +142,9 @@ fn test_help_short_flag() {
     cmd.arg("-h")
         .assert()
         .success()
-        .stdout(predicate::str::contains("Format numbers with thousand separators"));
+        .stdout(predicate::str::contains(
+            "Format numbers with thousand separators",
+        ));
 }
 
 #[test]
