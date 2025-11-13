@@ -3,6 +3,10 @@ name = "nice-number"
 version = "0.1.0"
 edition = "2024"
 
+[[bin]]
+name = "nn"
+path = "src/main.rs"
+
 [dependencies]
 num-format = "0.4"
 colored = "2.1"

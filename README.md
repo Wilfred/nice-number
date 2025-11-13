@@ -17,7 +17,7 @@ echo "1234567" | cargo run --quiet
 Or use the compiled binary:
 
 ```bash
-echo "1234567" | ./target/release/nice-number
+echo "1234567" | ./target/release/nn
 ```
 
 ## Output
