@@ -6,10 +6,10 @@ fn get_size_description(number: i64) -> String {
     let abs_value = number.abs();
 
     match abs_value {
-        0..=999 => "A tiny, adorable little number!".bright_cyan().to_string(),
-        1_000..=999_999 => "Medium-sized - we're in the thousands now!".bright_green().to_string(),
-        1_000_000..=999_999_999 => "Pretty big - that's a lot of millions!".bright_yellow().to_string(),
-        _ => "EXTREMELY BIG - we've reached the billions and beyond!".bright_red().bold().to_string(),
+        0..=999 => "Tiny!".bright_cyan().to_string(),
+        1_000..=999_999 => "Medium".bright_green().to_string(),
+        1_000_000..=999_999_999 => "Pretty big!".bright_yellow().to_string(),
+        _ => "EXTREMELY BIG!".bright_red().bold().to_string(),
     }
 }
 
