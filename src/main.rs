@@ -1,6 +1,6 @@
 use clap::Parser;
 use colored::Colorize;
-use humansize::{format_size, BINARY};
+use humansize::{BINARY, format_size};
 use num_format::{Locale, ToFormattedString};
 use regex::Regex;
 use std::io::{self, BufRead};
