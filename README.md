@@ -1,6 +1,12 @@
 # nice-number
 
-A Rust command-line tool that formats numbers with thousand separators and adds colorful descriptions based on their size. Accepts numbers as command-line arguments or via stdin, and supports integers, decimals, and scientific notation. Can also process arbitrary text, formatting only the embedded numbers while preserving the rest unchanged.
+A Rust command-line tool that formats numbers with thousand separators.
+
+It adds colorful descriptions based on number size.
+
+You can pass numbers as command-line arguments or via stdin.
+
+It supports integers, decimals, and scientific notation. It can also process arbitrary text, formatting only the embedded numbers while preserving the rest unchanged.
 
 ## Installation
 
@@ -32,24 +38,6 @@ The tool reads a number from the command line or stdin and outputs:
 - A colorful description of the number's size (for pure numbers)
 - Optional binary unit format (KiB, MiB, GiB, etc.) with `--bytes` flag
 - **Text processing mode**: Can process arbitrary text with embedded numbers, formatting only the numbers while preserving the rest unchanged
-
-### Size Categories
-
-- **0-999**: `(small)` in cyan
-- **1,000-999,999**: `(medium)` in green
-- **1,000,000-999,999,999**: `(pretty big)` in yellow
-- **1,000,000,000+**: `(extremely big)` in bold red
-
-### Binary Units (--bytes flag)
-
-When using the `--bytes` or `-b` flag, the tool also displays the number in binary units:
-- **B** (bytes): Less than 1,024
-- **KiB** (kibibyte): 1,024 bytes
-- **MiB** (mebibyte): 1,024² bytes
-- **GiB** (gibibyte): 1,024³ bytes
-- **TiB** (tebibyte): 1,024⁴ bytes
-- **PiB** (pebibyte): 1,024⁵ bytes
-- **EiB** (exbibyte): 1,024⁶ bytes
 
 ## Examples
 
