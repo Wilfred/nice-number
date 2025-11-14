@@ -152,11 +152,11 @@ fn main() {
         let stdin = io::stdin();
         let mut lines = stdin.lock().lines();
 
-        if let Some(Ok(line)) = lines.next() {
+        if let Some(Ok(line)) = lines.next()
+            && !line.trim().is_empty()
+        {
             process_number(&line, cli.bytes);
-        } else {
-            eprintln!("Error: Please enter a valid number");
-            std::process::exit(1);
         }
+        // Empty input is allowed - just do nothing
     }
 }
