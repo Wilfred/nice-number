@@ -47,6 +47,11 @@ struct Cli {
 fn get_size_description(number: f64) -> String {
     let abs_value = number.abs();
 
+    // Special case for zero
+    if abs_value == 0.0 {
+        return "(zero)".bright_white().bold().to_string();
+    }
+
     match abs_value as i64 {
         0..=999 => "(small)".bright_cyan().to_string(),
         1_000..=999_999 => "(medium)".bright_green().to_string(),
