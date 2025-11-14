@@ -3,7 +3,7 @@ use predicates::prelude::*;
 
 #[test]
 fn test_small_integer() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("42")
         .assert()
         .success()
@@ -13,7 +13,7 @@ fn test_small_integer() {
 
 #[test]
 fn test_small_decimal() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("42.50")
         .assert()
         .success()
@@ -23,7 +23,7 @@ fn test_small_decimal() {
 
 #[test]
 fn test_decimal_with_rounding() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("42.123456")
         .assert()
         .success()
@@ -34,7 +34,7 @@ fn test_decimal_with_rounding() {
 
 #[test]
 fn test_medium_number() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("5000")
         .assert()
         .success()
@@ -44,7 +44,7 @@ fn test_medium_number() {
 
 #[test]
 fn test_pretty_big_number() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("1234567")
         .assert()
         .success()
@@ -54,7 +54,7 @@ fn test_pretty_big_number() {
 
 #[test]
 fn test_pretty_big_decimal() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("1234567.89")
         .assert()
         .success()
@@ -64,7 +64,7 @@ fn test_pretty_big_decimal() {
 
 #[test]
 fn test_extremely_big_number() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("9876543210")
         .assert()
         .success()
@@ -74,7 +74,7 @@ fn test_extremely_big_number() {
 
 #[test]
 fn test_negative_small_number() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("-42")
         .assert()
         .success()
@@ -84,7 +84,7 @@ fn test_negative_small_number() {
 
 #[test]
 fn test_negative_medium_number() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("-5000")
         .assert()
         .success()
@@ -94,7 +94,7 @@ fn test_negative_medium_number() {
 
 #[test]
 fn test_zero() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("0")
         .assert()
         .success()
@@ -104,7 +104,7 @@ fn test_zero() {
 
 #[test]
 fn test_text_without_numbers_via_stdin() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("not a number")
         .assert()
         .success()
@@ -113,7 +113,7 @@ fn test_text_without_numbers_via_stdin() {
 
 #[test]
 fn test_empty_input() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("")
         .assert()
         .failure()
@@ -124,7 +124,7 @@ fn test_empty_input() {
 
 #[test]
 fn test_help_flag() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("--help")
         .assert()
         .success()
@@ -136,7 +136,7 @@ fn test_help_flag() {
 
 #[test]
 fn test_help_short_flag() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("-h")
         .assert()
         .success()
@@ -147,7 +147,7 @@ fn test_help_short_flag() {
 
 #[test]
 fn test_version_flag() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("--version")
         .assert()
         .success()
@@ -157,7 +157,7 @@ fn test_version_flag() {
 
 #[test]
 fn test_version_short_flag() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("-V")
         .assert()
         .success()
@@ -167,7 +167,7 @@ fn test_version_short_flag() {
 
 #[test]
 fn test_decimal_no_rounding_needed() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("123.45")
         .assert()
         .success()
@@ -178,7 +178,7 @@ fn test_decimal_no_rounding_needed() {
 
 #[test]
 fn test_large_decimal_with_rounding() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("9876543210.999")
         .assert()
         .success()
@@ -189,7 +189,7 @@ fn test_large_decimal_with_rounding() {
 
 #[test]
 fn test_scientific_notation_large() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("1.23e5")
         .assert()
         .success()
@@ -199,7 +199,7 @@ fn test_scientific_notation_large() {
 
 #[test]
 fn test_scientific_notation_small() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("3.14e2")
         .assert()
         .success()
@@ -209,7 +209,7 @@ fn test_scientific_notation_small() {
 
 #[test]
 fn test_scientific_notation_extremely_big() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("9.87654321e9")
         .assert()
         .success()
@@ -219,7 +219,7 @@ fn test_scientific_notation_extremely_big() {
 
 #[test]
 fn test_scientific_notation_very_small() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("1.5e-3")
         .assert()
         .success()
@@ -229,7 +229,7 @@ fn test_scientific_notation_very_small() {
 
 #[test]
 fn test_scientific_notation_with_rounding() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("1.234567e3")
         .assert()
         .success()
@@ -240,7 +240,7 @@ fn test_scientific_notation_with_rounding() {
 
 #[test]
 fn test_scientific_notation_negative() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("-2.5e4")
         .assert()
         .success()
@@ -252,7 +252,7 @@ fn test_scientific_notation_negative() {
 
 #[test]
 fn test_arg_small_integer() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("42")
         .assert()
         .success()
@@ -262,7 +262,7 @@ fn test_arg_small_integer() {
 
 #[test]
 fn test_arg_medium_number() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("5000")
         .assert()
         .success()
@@ -272,7 +272,7 @@ fn test_arg_medium_number() {
 
 #[test]
 fn test_arg_decimal_with_rounding() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("42.123456")
         .assert()
         .success()
@@ -283,7 +283,7 @@ fn test_arg_decimal_with_rounding() {
 
 #[test]
 fn test_arg_pretty_big_decimal() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("1234567.89")
         .assert()
         .success()
@@ -293,7 +293,7 @@ fn test_arg_pretty_big_decimal() {
 
 #[test]
 fn test_arg_extremely_big_number() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("9876543210")
         .assert()
         .success()
@@ -303,7 +303,7 @@ fn test_arg_extremely_big_number() {
 
 #[test]
 fn test_arg_scientific_notation() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("1.23e5")
         .assert()
         .success()
@@ -313,7 +313,7 @@ fn test_arg_scientific_notation() {
 
 #[test]
 fn test_arg_negative_number() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("--")
         .arg("-5000")
         .assert()
@@ -324,7 +324,7 @@ fn test_arg_negative_number() {
 
 #[test]
 fn test_arg_text_without_numbers() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("not_a_number")
         .assert()
         .success()
@@ -335,7 +335,7 @@ fn test_arg_text_without_numbers() {
 
 #[test]
 fn test_bytes_flag_kib() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("1024")
         .arg("--bytes")
         .assert()
@@ -346,7 +346,7 @@ fn test_bytes_flag_kib() {
 
 #[test]
 fn test_bytes_flag_mib() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("1048576")
         .arg("--bytes")
         .assert()
@@ -357,7 +357,7 @@ fn test_bytes_flag_mib() {
 
 #[test]
 fn test_bytes_flag_gib() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("1073741824")
         .arg("--bytes")
         .assert()
@@ -368,7 +368,7 @@ fn test_bytes_flag_gib() {
 
 #[test]
 fn test_bytes_flag_short() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("2048")
         .arg("-b")
         .assert()
@@ -378,7 +378,7 @@ fn test_bytes_flag_short() {
 
 #[test]
 fn test_bytes_flag_decimal() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("1536.5")
         .arg("--bytes")
         .assert()
@@ -389,7 +389,7 @@ fn test_bytes_flag_decimal() {
 
 #[test]
 fn test_bytes_flag_less_than_kib() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("512")
         .arg("--bytes")
         .assert()
@@ -400,7 +400,7 @@ fn test_bytes_flag_less_than_kib() {
 
 #[test]
 fn test_bytes_flag_with_stdin() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("--bytes")
         .write_stdin("2048")
         .assert()
@@ -411,7 +411,7 @@ fn test_bytes_flag_with_stdin() {
 
 #[test]
 fn test_without_bytes_flag() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("1024")
         .assert()
         .success()
@@ -421,7 +421,7 @@ fn test_without_bytes_flag() {
 
 #[test]
 fn test_bytes_flag_tib() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("1099511627776")
         .arg("--bytes")
         .assert()
@@ -431,7 +431,7 @@ fn test_bytes_flag_tib() {
 
 #[test]
 fn test_bytes_flag_multiple_kib() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.arg("5120")
         .arg("--bytes")
         .assert()
@@ -444,7 +444,7 @@ fn test_bytes_flag_multiple_kib() {
 
 #[test]
 fn test_text_with_single_number() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("The file is 1024 bytes")
         .assert()
         .success()
@@ -453,7 +453,7 @@ fn test_text_with_single_number() {
 
 #[test]
 fn test_text_with_multiple_numbers() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("I have 5000 apples and 2500 oranges")
         .assert()
         .success()
@@ -464,7 +464,7 @@ fn test_text_with_multiple_numbers() {
 
 #[test]
 fn test_text_with_decimal() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("Price is 1234.56 dollars")
         .assert()
         .success()
@@ -473,7 +473,7 @@ fn test_text_with_decimal() {
 
 #[test]
 fn test_text_without_numbers() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("Hello world without numbers")
         .assert()
         .success()
@@ -482,7 +482,7 @@ fn test_text_without_numbers() {
 
 #[test]
 fn test_text_with_negative_number() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("Temperature: -25.5 degrees")
         .assert()
         .success()
@@ -491,7 +491,7 @@ fn test_text_with_negative_number() {
 
 #[test]
 fn test_text_with_scientific_notation() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("Science: 1.23e5 particles")
         .assert()
         .success()
@@ -500,7 +500,7 @@ fn test_text_with_scientific_notation() {
 
 #[test]
 fn test_text_with_many_numbers() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("Results: 10 samples, 1000 iterations, 0.05 error rate")
         .assert()
         .success()
@@ -511,7 +511,7 @@ fn test_text_with_many_numbers() {
 
 #[test]
 fn test_pure_number_still_shows_description() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("1024")
         .assert()
         .success()
@@ -521,7 +521,7 @@ fn test_pure_number_still_shows_description() {
 
 #[test]
 fn test_text_preserves_formatting() {
-    let mut cmd = Command::cargo_bin("nn").unwrap();
+    let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("Total: 1234567 items")
         .assert()
         .success()
