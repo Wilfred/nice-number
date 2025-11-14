@@ -147,9 +147,9 @@ The tool handles various input types gracefully:
 - **Pure numbers**: Formatted with description and optional binary units
 - **Text with numbers**: Numbers are formatted, text passes through unchanged
 - **Text without numbers**: Passes through unchanged
-- **Empty input**: Returns an error
+- **Empty input**: Produces no output (allowed)
 
 ```bash
 $ echo "" | nn
-Error: Please enter a valid number
+(no output)
 ```

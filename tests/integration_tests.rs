@@ -116,10 +116,8 @@ fn test_empty_input() {
     let mut cmd = Command::new(assert_cmd::cargo::cargo_bin!("nn"));
     cmd.write_stdin("")
         .assert()
-        .failure()
-        .stderr(predicate::str::contains(
-            "Error: Please enter a valid number",
-        ));
+        .success()
+        .stdout(predicate::str::is_empty());
 }
 
 #[test]

@@ -182,10 +182,11 @@ fn main() {
         let mut lines = stdin.lock().lines();
 
         if let Some(Ok(line)) = lines.next() {
-            process_number(&line, cli.bytes);
-        } else {
-            eprintln!("Error: Please enter a valid number");
-            std::process::exit(1);
+            if !line.trim().is_empty() {
+                process_number(&line, cli.bytes);
+            }
+            // Empty input is allowed - just do nothing
         }
+        // No input from stdin is also allowed - just do nothing
     }
 }
