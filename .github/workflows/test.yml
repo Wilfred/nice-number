@@ -29,11 +29,6 @@ jobs:
   clippy:
     name: Run Clippy
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        rust:
-          - stable
-          - beta
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -41,7 +36,7 @@ jobs:
       - name: Install Rust toolchain
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          toolchain: ${{ matrix.rust }}
+          toolchain: stable
           components: clippy
 
       - name: Run clippy
@@ -50,11 +45,6 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        rust:
-          - stable
-          - beta
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -62,7 +52,7 @@ jobs:
       - name: Install Rust toolchain
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          toolchain: ${{ matrix.rust }}
+          toolchain: stable
 
       - name: Cache cargo registry
         uses: actions/cache@v4
