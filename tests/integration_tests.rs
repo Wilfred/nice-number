@@ -99,7 +99,7 @@ fn test_zero() {
         .assert()
         .success()
         .stdout(predicate::str::contains("0"))
-        .stdout(predicate::str::contains("(small)"));
+        .stdout(predicate::str::contains("(zero)"));
 }
 
 #[test]
@@ -224,7 +224,7 @@ fn test_scientific_notation_very_small() {
         .assert()
         .success()
         .stdout(predicate::str::contains("0"))
-        .stdout(predicate::str::contains("(small)"));
+        .stdout(predicate::str::contains("(zero)"));
 }
 
 #[test]
