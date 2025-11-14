@@ -1,6 +1,6 @@
 use clap::Parser;
 use colored::Colorize;
-use humansize::{BINARY, format_size};
+use humansize::{BINARY, format_size, FormatSizeOptions};
 use num_format::{Locale, ToFormattedString};
 use regex::Regex;
 use std::io::{self, BufRead};
@@ -79,7 +79,9 @@ fn format_number_with_separators(number: f64) -> String {
 }
 
 fn format_as_binary_units(number: f64) -> String {
-    format_size(number as u64, BINARY)
+    // For large values (>= 1 KiB), show one decimal place
+    let options = FormatSizeOptions::from(BINARY).decimal_places(1);
+    format_size(number as u64, options)
 }
 
 fn format_single_number(number: f64) -> String {

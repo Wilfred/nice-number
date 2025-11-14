@@ -382,7 +382,7 @@ fn test_bytes_flag_decimal() {
         .assert()
         .success()
         .stdout(predicate::str::contains("1,536.50"))
-        .stdout(predicate::str::contains("1.50 KiB"));
+        .stdout(predicate::str::contains("1.5 KiB"));
 }
 
 #[test]
