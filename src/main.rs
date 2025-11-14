@@ -1,5 +1,6 @@
 use clap::Parser;
 use colored::Colorize;
+use humansize::{format_size, BINARY};
 use num_format::{Locale, ToFormattedString};
 use regex::Regex;
 use std::io::{self, BufRead};
@@ -78,37 +79,7 @@ fn format_number_with_separators(number: f64) -> String {
 }
 
 fn format_as_binary_units(number: f64) -> String {
-    let abs_value = number.abs();
-    let is_negative = number < 0.0;
-
-    let units: &[(&str, f64)] = &[
-        ("EiB", 1152921504606846976.0), // 1024^6
-        ("PiB", 1125899906842624.0),    // 1024^5
-        ("TiB", 1099511627776.0),       // 1024^4
-        ("GiB", 1073741824.0),          // 1024^3
-        ("MiB", 1048576.0),             // 1024^2
-        ("KiB", 1024.0),                // 1024^1
-    ];
-
-    for &(unit, divisor) in units {
-        if abs_value >= divisor {
-            let value = number / divisor;
-            let rounded = (value * 100.0).round() / 100.0;
-            return if rounded.fract() == 0.0 {
-                format!("{} {}", rounded as i64, unit)
-            } else {
-                format!("{:.2} {}", rounded, unit)
-            };
-        }
-    }
-
-    // Less than 1 KiB, show as bytes
-    let sign = if is_negative { "-" } else { "" };
-    if abs_value.fract() == 0.0 {
-        format!("{}{} B", sign, abs_value as i64)
-    } else {
-        format!("{}{:.2} B", sign, abs_value)
-    }
+    format_size(number as u64, BINARY)
 }
 
 fn format_single_number(number: f64) -> String {
