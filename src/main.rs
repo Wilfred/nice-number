@@ -111,26 +111,28 @@ fn process_number(input: &str, show_bytes: bool) {
             // Round to 2 decimal places
             let rounded = (number * 100.0).round() / 100.0;
 
-            // Check if rounding occurred
-            let was_rounded = (number - rounded).abs() > f64::EPSILON;
-
-            let formatted = format_number_with_separators(rounded);
-            let rounded_text = if was_rounded {
-                " (rounded)".dimmed().to_string()
-            } else {
-                String::new()
-            };
-
-            println!(
-                "{}{} {}",
-                formatted,
-                rounded_text,
-                get_size_description(rounded)
-            );
-
             if show_bytes {
+                // When -b flag is passed, only show binary format without color
                 let binary_format = format_as_binary_units(rounded);
-                println!("{}", binary_format.bright_magenta());
+                println!("{}", binary_format);
+            } else {
+                // Default behavior: show formatted number with description
+                // Check if rounding occurred
+                let was_rounded = (number - rounded).abs() > f64::EPSILON;
+
+                let formatted = format_number_with_separators(rounded);
+                let rounded_text = if was_rounded {
+                    " (rounded)".dimmed().to_string()
+                } else {
+                    String::new()
+                };
+
+                println!(
+                    "{}{} {}",
+                    formatted,
+                    rounded_text,
+                    get_size_description(rounded)
+                );
             }
         }
         Err(_) => {
