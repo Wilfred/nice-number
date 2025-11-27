@@ -152,13 +152,14 @@ fn main() {
     } else {
         // Process number from stdin
         let stdin = io::stdin();
-        let mut lines = stdin.lock().lines();
+        let lines = stdin.lock().lines();
 
-        if let Some(Ok(line)) = lines.next()
-            && !line.trim().is_empty()
-        {
-            process_number(&line, cli.bytes);
+        for line in lines {
+            if let Ok(line) = line {
+                if !line.trim().is_empty() {
+                    process_number(&line, cli.bytes);
+                }
+            }
         }
-        // Empty input is allowed - just do nothing
     }
 }
