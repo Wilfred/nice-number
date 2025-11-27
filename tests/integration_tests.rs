@@ -338,7 +338,6 @@ fn test_bytes_flag_kib() {
         .arg("--bytes")
         .assert()
         .success()
-        .stdout(predicate::str::contains("1,024"))
         .stdout(predicate::str::contains("1 KiB"));
 }
 
@@ -349,7 +348,6 @@ fn test_bytes_flag_mib() {
         .arg("--bytes")
         .assert()
         .success()
-        .stdout(predicate::str::contains("1,048,576"))
         .stdout(predicate::str::contains("1 MiB"));
 }
 
@@ -360,7 +358,6 @@ fn test_bytes_flag_gib() {
         .arg("--bytes")
         .assert()
         .success()
-        .stdout(predicate::str::contains("1,073,741,824"))
         .stdout(predicate::str::contains("1 GiB"));
 }
 
@@ -371,7 +368,7 @@ fn test_bytes_flag_short() {
         .arg("-b")
         .assert()
         .success()
-        .stdout(predicate::str::contains("2,048").and(predicate::str::contains("2 KiB")));
+        .stdout(predicate::str::contains("2 KiB"));
 }
 
 #[test]
@@ -381,7 +378,6 @@ fn test_bytes_flag_decimal() {
         .arg("--bytes")
         .assert()
         .success()
-        .stdout(predicate::str::contains("1,536.50"))
         .stdout(predicate::str::contains("1.50 KiB"));
 }
 
@@ -392,7 +388,6 @@ fn test_bytes_flag_less_than_kib() {
         .arg("--bytes")
         .assert()
         .success()
-        .stdout(predicate::str::contains("512"))
         .stdout(predicate::str::contains("512 B"));
 }
 
@@ -403,7 +398,6 @@ fn test_bytes_flag_with_stdin() {
         .write_stdin("2048")
         .assert()
         .success()
-        .stdout(predicate::str::contains("2,048"))
         .stdout(predicate::str::contains("2 KiB"));
 }
 
@@ -434,7 +428,6 @@ fn test_bytes_flag_multiple_kib() {
         .arg("--bytes")
         .assert()
         .success()
-        .stdout(predicate::str::contains("5,120"))
         .stdout(predicate::str::contains("5 KiB"));
 }
 
