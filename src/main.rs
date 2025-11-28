@@ -156,7 +156,9 @@ fn main() {
 
         for line in lines {
             if let Ok(line) = line {
-                if !line.trim().is_empty() {
+                if line.trim().is_empty() {
+                    println!();
+                } else {
                     process_number(&line, cli.bytes);
                 }
             }
