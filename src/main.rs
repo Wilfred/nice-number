@@ -154,13 +154,11 @@ fn main() {
         let stdin = io::stdin();
         let lines = stdin.lock().lines();
 
-        for line in lines {
-            if let Ok(line) = line {
-                if line.trim().is_empty() {
-                    println!();
-                } else {
-                    process_number(&line, cli.bytes);
-                }
+        for line in lines.map_while(Result::ok) {
+            if line.trim().is_empty() {
+                println!();
+            } else {
+                process_number(&line, cli.bytes);
             }
         }
     }
