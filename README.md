@@ -127,3 +127,69 @@ Results: 10 samples, 1,000 iterations, 0.05 error rate
 $ echo "Hello world without numbers" | nn
 Hello world without numbers
 ```
+
+## Similar Projects
+
+Several tools offer number formatting capabilities. Here's how `nice-number` compares:
+
+### numfmt (GNU Coreutils)
+
+[`numfmt`](https://www.gnu.org/software/coreutils/manual/html_node/numfmt-invocation.html) is a general-purpose number formatting utility from GNU coreutils.
+
+**Comparison:**
+- **numfmt strengths**: More formatting options (SI units, IEC units, field selection), locale support, padding/alignment, arbitrary precision
+- **numfmt limitations**: No colorful size descriptions, more complex syntax, primarily designed for data processing rather than interactive use
+- **nice-number advantages**: Simpler syntax, colorful visual feedback, text processing mode (automatically finds and formats numbers in text), more user-friendly for interactive terminal use
+
+**Example:**
+```bash
+# numfmt: requires explicit format specification
+$ echo 1234567 | numfmt --grouping
+1,234,567
+
+# nice-number: automatic formatting with visual feedback
+$ echo 1234567 | nn
+1,234,567 (pretty big)
+```
+
+### humansize / humanize
+
+Python libraries like [`humanize`](https://github.com/python-humanize/humanize) and Rust crates like [`humansize`](https://github.com/LeopoldArkham/humansize) focus on human-readable file sizes.
+
+**Comparison:**
+- **humansize/humanize strengths**: Primarily library APIs, extensive size formatting options, language-specific integration
+- **humansize/humanize limitations**: Not standalone CLI tools (require scripting), focused mainly on byte sizes rather than general numbers
+- **nice-number advantages**: Standalone CLI ready to use, handles all number types (not just bytes), colorful descriptions, text processing mode
+
+### bc / calc / qalc
+
+Command-line calculators like [`bc`](https://www.gnu.org/software/bc/), [`calc`](http://www.isthe.com/chongo/tech/comp/calc/), and [`qalc`](https://qalculate.github.io/).
+
+**Comparison:**
+- **bc/calc/qalc strengths**: Powerful calculation engines, scripting capabilities, scientific/mathematical functions
+- **bc/calc/qalc limitations**: Focused on computation rather than formatting, no automatic thousand separators, no visual size descriptions
+- **nice-number advantages**: Specialized for formatting and readability, automatic thousand separators, colorful size context, simpler for formatting-only tasks
+
+### thousands (Rust crate)
+
+The [`thousands`](https://github.com/Thomasdezeeuw/thousands) Rust crate provides number formatting with separators.
+
+**Comparison:**
+- **thousands strengths**: Library for Rust programs, customizable separators
+- **thousands limitations**: Library only (not a CLI tool), no visual descriptions or interactive features
+- **nice-number advantages**: Complete CLI tool, colorful output, text processing mode, binary unit support, size descriptions
+
+### When to use nice-number
+
+Choose `nice-number` when you want:
+- **Quick visual feedback** on number magnitudes with colorful descriptions
+- **Simple, interactive formatting** without complex options or syntax
+- **Text processing** that automatically finds and formats embedded numbers
+- **User-friendly terminal experience** for everyday number formatting tasks
+- **Binary unit conversion** for file sizes and byte counts
+
+Choose alternatives when you need:
+- Complex field-based data processing (`numfmt`)
+- Scientific calculations and math operations (`bc`, `qalc`)
+- Library integration in your code (`humansize`, `thousands`)
+- Locale-specific formatting or precise control over output format
